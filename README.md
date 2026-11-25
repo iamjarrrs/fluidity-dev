@@ -147,7 +147,7 @@ Mahasiswa sering kewalahan mengatur waktu belajar menjelang ujian—bingung haru
 
 ## Tim WADW
 
-- **Muhammad Rian Anugrah** — Team Lead / Product & Algorithm Design
-- **Afit Fajar Rianto** — Tech Lead / Backend Engineer
-- **Muhammad Hanif Muyassar** — Fullstack Developer / Google API Integration
-- **Dani Eka Saputra** — Frontend Engineer / UI-UX
+- **Muhammad Rian Anugrah**
+- **Afit Fajar Rianto**
+- **Muhammad Hanif Muyassar**
+- **Dani Eka Saputra**
