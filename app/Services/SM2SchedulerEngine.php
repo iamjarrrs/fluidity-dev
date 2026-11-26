@@ -191,7 +191,7 @@ class SM2SchedulerEngine
                         'duration_minutes' => self::SESSION_DURATION_MINUTES,
                         'priority_score' => $priority,
                         'reason' => sprintf(
-                            'Bobot: %d/5 • Penguasaan: %d/5 • Sisa Ujian: %d hari',
+                            'Bobot %d/5 · Penguasaan %d/5 · Ujian %d hari lagi',
                             $selectedTopic->difficulty_weight,
                             $selectedTopic->mastery_level,
                             $this->getDaysToExam($selectedTopic)

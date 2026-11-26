@@ -33,11 +33,37 @@ class DashboardController extends Controller
         // Cek apakah token Google OAuth tersedia untuk sinkronisasi Google Calendar
         $calendarConnected = ! empty($user->google_access_token) || ! empty($user->google_refresh_token);
 
+        // Sesi berikutnya yang belum selesai (untuk kartu "Sesi berikutnya")
+        $nextSession = $upcomingSessions->firstWhere('status', '!=', 'completed');
+
+        // Ringkasan minggu ini
+        $weekSessions = $user->studySessions()
+            ->whereBetween('scheduled_start', [now()->startOfWeek(), now()->endOfWeek()])
+            ->get(['status', 'duration_minutes']);
+        $completedWeek = $weekSessions->where('status', 'completed');
+
+        $reviewDue = $courses->flatMap->topics
+            ->filter(fn ($topic) => $topic->next_review_due && $topic->next_review_due->lte(now()))
+            ->count();
+
+        // Ujian yang belum lewat, terdekat lebih dulu
+        $upcomingExams = $courses
+            ->filter(fn ($course) => $course->exam_date->gte(today()))
+            ->sortBy('exam_date')
+            ->values();
+
         return view('dashboard', [
             'user' => $user,
             'courses' => $courses,
             'upcomingSessions' => $upcomingSessions,
             'calendarConnected' => $calendarConnected,
+            'nextSession' => $nextSession,
+            'weekCompleted' => $completedWeek->count(),
+            'weekTotal' => $weekSessions->count(),
+            'weekHours' => round($completedWeek->sum('duration_minutes') / 60, 1),
+            'reviewDue' => $reviewDue,
+            'upcomingExams' => $upcomingExams,
+            'focusCourse' => $upcomingExams->first(),
         ]);
     }
 }

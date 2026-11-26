@@ -4,6 +4,20 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Warna utama Fluidity (teal). 600 ke atas digeser satu tingkat lebih gelap
+       supaya teks putih di atas bg-primary-600 lolos kontras WCAG AA. */
+    --color-primary-50: #f0fdfa;
+    --color-primary-100: #ccfbf1;
+    --color-primary-200: #99f6e4;
+    --color-primary-300: #5eead4;
+    --color-primary-400: #2dd4bf;
+    --color-primary-500: #0d9488;
+    --color-primary-600: #0f766e;
+    --color-primary-700: #115e59;
+    --color-primary-800: #134e4a;
+    --color-primary-900: #042f2e;
+    --color-primary-950: #022624;
 }

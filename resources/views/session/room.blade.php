@@ -9,7 +9,7 @@
     <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700">
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-primary-50 text-primary-700">
                     {{ $course->name }}
                 </span>
                 <h1 class="text-xl font-bold text-slate-900 mt-1">{{ $topic->title }}</h1>
@@ -20,9 +20,9 @@
             <div class="text-right">
                 <span class="text-xs font-semibold px-3 py-1 rounded-full"
                     :class="{
-                        'bg-amber-50 text-amber-700 border border-amber-200': phase === 'pomodoro',
-                        'bg-blue-50 text-blue-700 border border-blue-200': phase === 'recall',
-                        'bg-purple-50 text-purple-700 border border-purple-200': phase === 'feynman',
+                        'bg-rose-50 text-rose-700 border border-rose-200': phase === 'pomodoro',
+                        'bg-violet-50 text-violet-700 border border-violet-200': phase === 'recall',
+                        'bg-amber-50 text-amber-800 border border-amber-200': phase === 'feynman',
                         'bg-emerald-50 text-emerald-700 border border-emerald-200': phase === 'done',
                     }">
                     <span x-text="phaseLabel"></span>
@@ -33,11 +33,11 @@
         <!-- Phase Progress Bar -->
         <div class="mt-4 flex gap-1">
             <div class="h-1.5 rounded-full flex-1 transition-all duration-500"
-                :class="phase === 'pomodoro' || phase === 'recall' || phase === 'feynman' || phase === 'done' ? 'bg-blue-500' : 'bg-slate-200'"></div>
+                :class="phase === 'pomodoro' || phase === 'recall' || phase === 'feynman' || phase === 'done' ? 'bg-primary-500' : 'bg-slate-200'"></div>
             <div class="h-1.5 rounded-full flex-1 transition-all duration-500"
-                :class="phase === 'recall' || phase === 'feynman' || phase === 'done' ? 'bg-blue-500' : 'bg-slate-200'"></div>
+                :class="phase === 'recall' || phase === 'feynman' || phase === 'done' ? 'bg-primary-500' : 'bg-slate-200'"></div>
             <div class="h-1.5 rounded-full flex-1 transition-all duration-500"
-                :class="phase === 'feynman' || phase === 'done' ? 'bg-blue-500' : 'bg-slate-200'"></div>
+                :class="phase === 'feynman' || phase === 'done' ? 'bg-primary-500' : 'bg-slate-200'"></div>
         </div>
     </div>
 
@@ -64,7 +64,7 @@
         <!-- Timer Controls -->
         <div class="flex items-center justify-center gap-3 mb-6">
             <button @click="toggleTimer()" class="px-6 py-2.5 rounded-xl font-semibold text-sm transition shadow-sm"
-                :class="timerRunning ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'">
+                :class="timerRunning ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'bg-primary-600 hover:bg-primary-700 text-white'">
                 <span x-text="timerRunning ? '⏸ Jeda' : '▶ Mulai'"></span>
             </button>
             <button @click="resetTimer()" class="px-4 py-2.5 rounded-xl font-semibold text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
@@ -75,14 +75,14 @@
         <!-- Quick Durations -->
         <div class="flex items-center justify-center gap-2 mb-6">
             <span class="text-xs text-slate-500">Atur durasi:</span>
-            <button @click="setTimer(50)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-blue-300 transition" :class="totalMinutes === 50 ? 'bg-blue-50 text-blue-700 border-blue-300' : ''">50 menit</button>
-            <button @click="setTimer(25)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-blue-300 transition" :class="totalMinutes === 25 ? 'bg-blue-50 text-blue-700 border-blue-300' : ''">25 menit</button>
-            <button @click="setTimer(5)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-blue-300 transition" :class="totalMinutes === 5 ? 'bg-blue-50 text-blue-700 border-blue-300' : ''">5 menit (demo)</button>
-            <button @click="setTimer(1)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-blue-300 transition" :class="totalMinutes === 1 ? 'bg-blue-50 text-blue-700 border-blue-300' : ''">1 menit (test)</button>
+            <button @click="setTimer(50)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-primary-300 transition" :class="totalMinutes === 50 ? 'bg-primary-50 text-primary-700 border-primary-300' : ''">50 menit</button>
+            <button @click="setTimer(25)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-primary-300 transition" :class="totalMinutes === 25 ? 'bg-primary-50 text-primary-700 border-primary-300' : ''">25 menit</button>
+            <button @click="setTimer(5)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-primary-300 transition" :class="totalMinutes === 5 ? 'bg-primary-50 text-primary-700 border-primary-300' : ''">5 menit (demo)</button>
+            <button @click="setTimer(1)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-primary-300 transition" :class="totalMinutes === 1 ? 'bg-primary-50 text-primary-700 border-primary-300' : ''">1 menit (test)</button>
         </div>
 
         <!-- Skip to next phase (for demo) -->
-        <button @click="skipPomodoro()" class="text-xs text-slate-400 hover:text-blue-600 underline transition">
+        <button @click="skipPomodoro()" class="text-xs text-slate-400 hover:text-primary-600 underline transition">
             Lewati ke Active Recall →
         </button>
     </div>
@@ -92,7 +92,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
             <h2 class="text-lg font-bold text-slate-900">🧠 Active Recall — Uji Pemahaman</h2>
             <button type="button" @click="refreshQuestions()" :disabled="isRefreshing"
-                class="text-xs font-semibold px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-blue-300 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 disabled:opacity-50 transition self-start sm:self-auto">
+                class="text-xs font-semibold px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-primary-300 bg-slate-50 hover:bg-primary-50 text-slate-700 hover:text-primary-700 disabled:opacity-50 transition self-start sm:self-auto">
                 <span x-show="!isRefreshing">🔄 Buat Soal Baru</span>
                 <span x-show="isRefreshing">⏳ Membuat soal...</span>
             </button>
@@ -103,8 +103,8 @@
             <template x-for="(question, qi) in questions" :key="qi">
                 <button type="button" @click="selectQuestion(question)"
                     class="w-full text-left p-4 rounded-xl border-2 transition text-sm"
-                    :class="selectedQuestion === question ? 'border-blue-500 bg-blue-50 text-blue-900' : 'border-slate-200 hover:border-blue-300 bg-white text-slate-700'">
-                    <span class="font-bold text-blue-600 mr-2" x-text="'Q' + (qi + 1) + '.'"></span>
+                    :class="selectedQuestion === question ? 'border-primary-500 bg-primary-50 text-primary-900' : 'border-slate-200 hover:border-primary-300 bg-white text-slate-700'">
+                    <span class="font-bold text-primary-600 mr-2" x-text="'Q' + (qi + 1) + '.'"></span>
                     <span x-text="question"></span>
                 </button>
             </template>
@@ -112,7 +112,7 @@
 
         <div class="mt-6 text-center">
             <button type="button" @click="goToFeynman()" :disabled="!selectedQuestion"
-                class="px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-sm transition text-sm">
+                class="px-8 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-sm transition text-sm">
                 Lanjut ke Penjelasan Feynman →
             </button>
         </div>
@@ -124,9 +124,9 @@
         <p class="text-xs text-slate-500 mb-4 text-center">Bayangkan Anda menjelaskan konsep ini ke teman yang belum pernah belajar topik ini.</p>
 
         <!-- Selected Question -->
-        <div class="bg-blue-50 rounded-xl p-4 border border-blue-200 mb-5">
-            <div class="text-xs font-bold text-blue-700 mb-1">Pertanyaan yang dipilih:</div>
-            <p class="text-sm text-blue-900 font-medium" x-text="selectedQuestion"></p>
+        <div class="bg-primary-50 rounded-xl p-4 border border-primary-200 mb-5">
+            <div class="text-xs font-bold text-primary-700 mb-1">Pertanyaan yang dipilih:</div>
+            <p class="text-sm text-primary-900 font-medium" x-text="selectedQuestion"></p>
         </div>
 
         <!-- Feynman Form -->
@@ -141,7 +141,7 @@
                     Penjelasan Anda (minimal 20 karakter):
                 </label>
                 <textarea id="explanation" name="explanation" rows="8"
-                    class="w-full rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 p-4 text-sm text-slate-800 placeholder-slate-400 resize-none transition"
+                    class="w-full rounded-xl border border-slate-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 p-4 text-sm text-slate-800 placeholder-slate-400 resize-none transition"
                     placeholder="Jadi konsep ini intinya adalah... Cara kerjanya seperti... Contohnya dalam kehidupan nyata..."
                     x-model="explanation"
                     required minlength="20" maxlength="5000"></textarea>

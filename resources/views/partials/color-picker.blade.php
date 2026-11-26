@@ -1,45 +1,43 @@
 @php
+    // Sengaja menghindari rose, violet, amber, dan sky karena itu warna mode sesi
     $swatches = [
-        ['hex' => '#3b82f6', 'label' => 'Ocean Blue'],
-        ['hex' => '#6366f1', 'label' => 'Indigo'],
-        ['hex' => '#8b5cf6', 'label' => 'Violet'],
-        ['hex' => '#ec4899', 'label' => 'Rose'],
-        ['hex' => '#ef4444', 'label' => 'Coral'],
-        ['hex' => '#f59e0b', 'label' => 'Amber'],
-        ['hex' => '#10b981', 'label' => 'Emerald'],
-        ['hex' => '#06b6d4', 'label' => 'Cyan'],
+        '#0f766e' => 'Teal',
+        '#15803d' => 'Hijau',
+        '#65a30d' => 'Lime',
+        '#3730a3' => 'Indigo',
+        '#be185d' => 'Magenta',
+        '#c2410c' => 'Oranye',
+        '#92400e' => 'Cokelat',
+        '#475569' => 'Abu',
     ];
-    $initialColor = strtolower($selectedColor ?? '#3b82f6');
+    $initialColor = strtolower($selectedColor ?? '#0f766e');
 @endphp
 
-<div x-data="{ color: '{{ $initialColor }}' }" class="space-y-2">
+{{-- Memancarkan event course-color supaya bagian lain halaman bisa ikut menampilkan warnanya --}}
+<div x-data="{ color: '{{ $initialColor }}', presets: @js(array_keys($swatches)) }" x-effect="$dispatch('course-color', color)" class="space-y-3">
     <input type="hidden" name="color" :value="color">
 
-    <div class="flex flex-wrap items-center gap-2.5">
-        @foreach($swatches as $swatch)
-            <button type="button"
-                @click="color = '{{ $swatch['hex'] }}'"
-                title="{{ $swatch['label'] }}"
-                class="w-7 h-7 rounded-full transition-all duration-150 flex items-center justify-center focus:outline-none"
-                style="background-color: {{ $swatch['hex'] }};"
-                :class="color === '{{ $swatch['hex'] }}' ? 'ring-2 ring-offset-2 ring-slate-800 scale-110 shadow-sm' : 'opacity-85 hover:opacity-100 hover:scale-105'">
-                <svg x-show="color === '{{ $swatch['hex'] }}'" class="w-3.5 h-3.5 text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
+    <div class="flex flex-wrap items-center gap-3" role="group" aria-label="Pilih warna mata kuliah">
+        @foreach($swatches as $hex => $name)
+            <button type="button" @click="color = '{{ $hex }}'"
+                aria-label="{{ $name }}" title="{{ $name }}" :aria-pressed="color === '{{ $hex }}'"
+                class="grid size-7 place-items-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                :class="color === '{{ $hex }}' && 'ring-2 ring-slate-900 ring-offset-2'"
+                style="background-color: {{ $hex }}">
+                <svg x-show="color === '{{ $hex }}'" class="size-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
             </button>
         @endforeach
 
-        <!-- Custom Color Picker Opsional -->
-        <label title="Pilih warna kustom"
-            class="w-7 h-7 rounded-full border-2 border-dashed border-slate-300 hover:border-slate-500 flex items-center justify-center cursor-pointer transition overflow-hidden relative bg-gradient-to-tr from-rose-400 via-amber-300 to-sky-400"
-            :class="!['#3b82f6','#6366f1','#8b5cf6','#ec4899','#ef4444','#f59e0b','#10b981','#06b6d4'].includes(color) ? 'ring-2 ring-offset-2 ring-slate-800 scale-110' : 'opacity-80 hover:opacity-100'">
-            <input type="color" x-model="color" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer">
-            <span class="text-[11px] font-bold text-white drop-shadow">+</span>
+        <label title="Warna lain"
+            class="relative grid size-7 cursor-pointer place-items-center overflow-hidden rounded-full border border-dashed border-slate-400 bg-white focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2"
+            :class="!presets.includes(color) && 'border-solid border-transparent ring-2 ring-slate-900 ring-offset-2'"
+            :style="!presets.includes(color) && 'background-color: ' + color">
+            <input type="color" x-model="color" aria-label="Warna lain" class="absolute inset-0 h-full w-full cursor-pointer opacity-0">
+            <svg x-show="presets.includes(color)" class="size-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
         </label>
     </div>
 
-    <div class="flex items-center gap-2 text-[11px] text-slate-500">
-        <span class="w-3 h-3 rounded-full inline-block border border-slate-200" :style="'background-color: ' + color"></span>
-        <span>Warna terpilih: <code class="font-mono font-semibold text-slate-700" x-text="color.toUpperCase()"></code></span>
-    </div>
+    <p class="text-xs text-slate-500">
+        Warna terpilih <code class="font-mono text-slate-700" x-text="color.toUpperCase()"></code>
+    </p>
 </div>

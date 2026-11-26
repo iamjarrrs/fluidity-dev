@@ -41,7 +41,7 @@ class CourseController extends Controller
                 'name' => $validated['name'],
                 'code' => $validated['code'] ?? null,
                 'exam_date' => $validated['exam_date'],
-                'color' => $validated['color'] ?? '#3b82f6',
+                'color' => $validated['color'] ?? '#0f766e',
             ]);
 
             foreach ($validated['topics'] as $index => $topicData) {
@@ -124,7 +124,7 @@ class CourseController extends Controller
                 'name' => $validated['name'],
                 'code' => $validated['code'] ?? null,
                 'exam_date' => $validated['exam_date'],
-                'color' => $validated['color'] ?? '#3b82f6',
+                'color' => $validated['color'] ?? '#0f766e',
             ]);
 
             $keptTopicIds = [];

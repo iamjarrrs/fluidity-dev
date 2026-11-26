@@ -7,7 +7,7 @@
 
     <!-- Header -->
     <div>
-        <a href="{{ route('dashboard') }}" class="text-xs font-semibold text-blue-600 hover:text-blue-800 transition flex items-center gap-1 mb-2">
+        <a href="{{ route('dashboard') }}" class="text-xs font-semibold text-primary-600 hover:text-primary-800 transition flex items-center gap-1 mb-2">
             &larr; Kembali ke Dashboard
         </a>
         <h1 class="text-2xl font-bold text-slate-900">🎉 Sesi Belajar Selesai!</h1>
@@ -19,10 +19,10 @@
     <!-- Score & Mastery Card -->
     <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-            <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
-                <div class="text-xs font-semibold text-blue-700 mb-1">Skor Pemahaman</div>
-                <div class="text-4xl font-extrabold text-blue-600">
-                    {{ $review->score_awarded ?? 4 }}<span class="text-lg text-blue-400">/5</span>
+            <div class="p-4 rounded-xl bg-primary-50 border border-primary-100">
+                <div class="text-xs font-semibold text-primary-700 mb-1">Skor Pemahaman</div>
+                <div class="text-4xl font-extrabold text-primary-600">
+                    {{ $review->score_awarded ?? 4 }}<span class="text-lg text-primary-400">/5</span>
                 </div>
             </div>
 
@@ -36,13 +36,13 @@
                 </div>
             </div>
 
-            <div class="p-4 rounded-xl bg-purple-50 border border-purple-100">
-                <div class="text-xs font-semibold text-purple-700 mb-1">Jadwal Review Berikutnya</div>
-                <div class="text-lg font-extrabold text-purple-600 mt-1">
+            <div class="p-4 rounded-xl bg-sky-50 border border-sky-100">
+                <div class="text-xs font-semibold text-sky-700 mb-1">Jadwal Review Berikutnya</div>
+                <div class="text-lg font-extrabold text-sky-600 mt-1">
                     {{ $session->topic->interval_days }} Hari Lagi
                 </div>
                 @if($session->topic->next_review_due)
-                    <div class="text-[11px] text-purple-600 mt-0.5">
+                    <div class="text-[11px] text-sky-600 mt-0.5">
                         {{ \Carbon\Carbon::parse($session->topic->next_review_due)->isoFormat('D MMM Y') }}
                     </div>
                 @endif
@@ -83,7 +83,7 @@
         <a href="{{ route('courses.show', $session->topic->course_id) }}" class="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold transition">
             Lihat Detail Mata Kuliah
         </a>
-        <a href="{{ route('dashboard') }}" class="w-full sm:w-auto text-center px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition">
+        <a href="{{ route('dashboard') }}" class="w-full sm:w-auto text-center px-6 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold shadow-sm transition">
             Kembali ke Dashboard &rarr;
         </a>
     </div>
