@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Model Topic (Bab / Topik Materi).
+ * Menyimpan daftar file modul, rangkuman & bank soal AI, bobot kesulitan,
+ * serta parameter algoritma Spaced Repetition SM-2 (mastery, ease_factor, interval).
+ */
 class Topic extends Model
 {
     use HasFactory;

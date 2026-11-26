@@ -7,6 +7,11 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
+/**
+ * Mesin Penjadwalan Adaptif Fluidity (Adaptasi SuperMemo SM-2 + Exam-Proximity Compression).
+ * Mengatur prioritas belajar berdasarkan bobot kesulitan, tingkat penguasaan (mastery),
+ * dan sisa hari menuju ujian, sambil menghindari bentrok jadwal sibuk & mencegah burnout.
+ */
 class SM2SchedulerEngine
 {
     /**

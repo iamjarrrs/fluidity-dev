@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * Model User (Mahasiswa).
+ * Menyimpan data akun Google OAuth, token Google Calendar (terenkripsi),
+ * serta preferensi jam luang belajar harian.
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -40,16 +45,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'token_expires_at' => 'datetime',
             'password' => 'hashed',
+            // Token Google OAuth otomatis dienkripsi saat disimpan & didekripsi saat dibaca
             'google_access_token' => 'encrypted',
             'google_refresh_token' => 'encrypted',
         ];
     }
 
+    /** Daftar mata kuliah yang dimiliki mahasiswa */
     public function courses(): HasMany
     {
         return $this->hasMany(Course::class);
     }
 
+    /** Daftar sesi belajar terjadwal maupun yang sudah selesai */
     public function studySessions(): HasMany
     {
         return $this->hasMany(StudySession::class);

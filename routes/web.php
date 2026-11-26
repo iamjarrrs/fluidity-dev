@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Web Routes — Peta URL Utama Aplikasi Fluidity
 |--------------------------------------------------------------------------
+| - Public routes: Halaman login & callback Google OAuth 2.0
+| - Auth routes: Dashboard, CRUD Mata Kuliah, Penjadwalan, dan Study Room
 */
 
 // Halaman Login & Google OAuth

@@ -7,6 +7,11 @@ use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Layanan Integrasi Google Gemini AI.
+ * Bertanggung jawab merangkum modul kuliah, membuat bank pertanyaan Active Recall,
+ * serta mengevaluasi penjelasan Feynman mahasiswa dengan umpan balik suportif.
+ */
 class GeminiService
 {
     private string $apiKey;

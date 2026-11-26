@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * Model StudySession (Sesi Belajar Terjadwal).
+ * Merepresentasikan satu slot waktu belajar (60 menit) untuk satu topik,
+ * termasuk ID event yang tersinkron di Google Calendar.
+ */
 class StudySession extends Model
 {
     use HasFactory;

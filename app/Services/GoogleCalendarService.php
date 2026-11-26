@@ -9,6 +9,11 @@ use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Layanan Integrasi Google Calendar REST API v3.
+ * Menangani refresh OAuth token otomatis, pembacaan slot sibuk mahasiswa,
+ * serta pembuatan dan penghapusan event sesi belajar di kalender Google.
+ */
 class GoogleCalendarService
 {
     private const CALENDAR_API_BASE = 'https://www.googleapis.com/calendar/v3';

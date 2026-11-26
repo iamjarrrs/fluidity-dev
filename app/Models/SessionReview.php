@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Model SessionReview (Hasil Evaluasi Sesi Belajar).
+ * Menyimpan pertanyaan Active Recall yang dipilih, penjelasan Feynman mahasiswa,
+ * feedback dari Gemini AI, serta skor pemahaman (1-5).
+ */
 class SessionReview extends Model
 {
     use HasFactory;
