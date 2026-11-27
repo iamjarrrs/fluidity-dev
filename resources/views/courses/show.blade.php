@@ -19,7 +19,7 @@
 @section('content')
 <div class="max-w-4xl mx-auto">
 
-    <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
+    <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
         <svg class="size-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Kembali ke Dashboard
     </a>
@@ -46,10 +46,10 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <a href="{{ route('courses.edit', $course->id) }}" class="inline-flex h-10 items-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
+            <a href="{{ route('courses.edit', $course->id) }}" class="inline-flex h-10 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
                 Edit mata kuliah
             </a>
-            <a href="{{ route('schedule.preview') }}" class="inline-flex h-10 items-center rounded-lg bg-primary-600 px-4 text-sm font-medium text-white hover:bg-primary-700 transition-colors">
+            <a href="{{ route('schedule.preview') }}" class="inline-flex h-10 items-center rounded-full bg-primary-600 px-4 text-sm font-medium text-white hover:bg-primary-700 transition-colors">
                 Buat jadwal belajar
             </a>
         </div>

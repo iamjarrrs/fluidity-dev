@@ -74,7 +74,7 @@
                 <span class="grid h-9 w-9 place-items-center rounded-full bg-amber-100 text-amber-800 text-sm font-semibold" title="{{ $authUser->name }} ({{ $authUser->email }})">{{ $initials }}</span>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="text-xs font-medium text-slate-600 hover:text-red-700 border border-slate-200 hover:border-red-300 rounded-lg px-3 py-1.5 transition">
+                    <button type="submit" class="text-xs font-medium text-slate-600 hover:text-red-700 border border-slate-200 hover:border-red-300 rounded-full px-3 py-1.5 transition">
                         Keluar
                     </button>
                 </form>

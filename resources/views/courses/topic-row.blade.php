@@ -56,7 +56,7 @@
                 {{ $topic ? 'Tambah modul baru' : 'Modul atau slide dosen' }} <span class="text-slate-500">(opsional)</span>
             </label>
             <input id="topic-{{ $i }}-files" type="file" name="topics[{{ $i }}][module_files][]" multiple accept=".pdf,.doc,.docx,.txt"
-                   class="module-file-input block w-full cursor-pointer text-sm text-slate-500 file:mr-3 file:cursor-pointer file:rounded-lg file:border file:border-slate-200 file:bg-white file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-slate-900 hover:file:bg-slate-100">
+                   class="module-file-input block w-full cursor-pointer text-sm text-slate-500 file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-slate-200 file:bg-white file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-slate-900 hover:file:bg-slate-100">
             <p class="mt-2 text-xs text-slate-500">PDF, DOCX, atau TXT, maks. 5 MB per file. Bisa pilih lebih dari satu</p>
             <p class="selected-files-list mt-1 hidden text-xs text-slate-600"></p>
             <p class="file-size-error mt-1 hidden text-xs text-red-700" role="alert"></p>

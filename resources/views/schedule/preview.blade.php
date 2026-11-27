@@ -15,7 +15,7 @@
 <div class="max-w-5xl mx-auto">
 
     <!-- Header -->
-    <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
+    <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
         <svg class="size-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Kembali ke Dashboard
     </a>
@@ -48,7 +48,7 @@
                 <p class="mt-0.5 text-xs text-slate-500">Maksimal {{ $maxDaily }} sesi per hari</p>
             </div>
             <button type="button" @click="openPref = !openPref"
-                class="self-start sm:self-auto rounded-lg border border-slate-200 px-3 py-1.5 font-medium text-slate-800 hover:bg-slate-100 transition-colors">
+                class="self-start sm:self-auto rounded-full border border-slate-200 px-3 py-1.5 font-medium text-slate-800 hover:bg-slate-100 transition-colors">
                 <span x-text="openPref ? 'Tutup' : 'Atur jam luang'"></span>
             </button>
         </div>
@@ -104,7 +104,7 @@
                 </select>
             </div>
             <div>
-                <button type="submit" class="w-full rounded-lg bg-primary-600 px-4 py-2 font-medium text-white hover:bg-primary-700 transition-colors">
+                <button type="submit" class="w-full rounded-full bg-primary-600 px-4 py-2 font-medium text-white hover:bg-primary-700 transition-colors">
                     Simpan dan hitung ulang
                 </button>
             </div>
@@ -184,7 +184,7 @@
                 <p class="text-sm text-slate-600">
                     {{ $plan->count() }} sesi dalam {{ $days->count() }} hari
                 </p>
-                <button type="submit" class="h-11 w-full sm:w-auto rounded-lg bg-primary-600 px-6 text-sm font-medium text-white hover:bg-primary-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2">
+                <button type="submit" class="h-11 w-full sm:w-auto rounded-full bg-primary-600 px-6 text-sm font-medium text-white hover:bg-primary-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2">
                     @if(!empty($calendarConnected))
                         Tambahkan {{ $plan->count() }} sesi ke Google Calendar
                     @else

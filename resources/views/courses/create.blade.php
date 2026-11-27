@@ -7,7 +7,7 @@
 @section('content')
 <div class="max-w-4xl mx-auto">
 
-    <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
+    <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
         <svg class="size-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Kembali ke Dashboard
     </a>
@@ -58,7 +58,7 @@
                         Beri bobot kesulitan tiap bab. Gemini merangkum modul yang kamu unggah dan menyiapkan pertanyaan untuk sesi Active Recall.
                     </p>
                 </div>
-                <button type="button" id="add-topic-btn" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
+                <button type="button" id="add-topic-btn" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
                     <svg class="size-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
                     Tambah bab
                 </button>
@@ -71,8 +71,8 @@
         </section>
 
         <div class="flex items-center justify-end gap-3">
-            <a href="{{ route('dashboard') }}" class="inline-flex h-11 items-center rounded-lg border border-slate-200 bg-white px-5 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">Batal</a>
-            <button type="submit" class="h-11 rounded-lg bg-primary-600 px-6 text-sm font-medium text-white hover:bg-primary-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2">
+            <a href="{{ route('dashboard') }}" class="inline-flex h-11 items-center rounded-full border border-slate-200 bg-white px-5 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">Batal</a>
+            <button type="submit" class="h-11 rounded-full bg-primary-600 px-6 text-sm font-medium text-white hover:bg-primary-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2">
                 Simpan mata kuliah
             </button>
         </div>

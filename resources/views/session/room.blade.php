@@ -2,165 +2,143 @@
 
 @section('title', $topic->title . ' - Sesi Belajar')
 
+@php
+    // Warna mode sesi dari palet: Pomodoro rose, Active Recall violet, Feynman amber
+    $steps = [
+        ['pomodoro', 'Pomodoro', 'bg-rose-500', 'text-rose-700'],
+        ['recall', 'Active Recall', 'bg-violet-600', 'text-violet-700'],
+        ['feynman', 'Feynman', 'bg-amber-500', 'text-amber-800'],
+    ];
+    $durations = [50, 25, 5, 1];
+@endphp
+
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6" x-data="studyRoom()">
 
-    <!-- Session Header -->
-    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-primary-50 text-primary-700">
-                    {{ $course->name }}
-                </span>
-                <h1 class="text-xl font-bold text-slate-900 mt-1">{{ $topic->title }}</h1>
-                <p class="text-xs text-slate-500 mt-0.5">
-                    Bobot: {{ $topic->difficulty_weight }}/5 • Penguasaan: Level {{ $topic->mastery_level }}/5
-                </p>
-            </div>
-            <div class="text-right">
-                <span class="text-xs font-semibold px-3 py-1 rounded-full"
-                    :class="{
-                        'bg-rose-50 text-rose-700 border border-rose-200': phase === 'pomodoro',
-                        'bg-violet-50 text-violet-700 border border-violet-200': phase === 'recall',
-                        'bg-amber-50 text-amber-800 border border-amber-200': phase === 'feynman',
-                        'bg-emerald-50 text-emerald-700 border border-emerald-200': phase === 'done',
-                    }">
-                    <span x-text="phaseLabel"></span>
-                </span>
-            </div>
+    <!-- Header sesi -->
+    <section class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+        <div class="border-l-2 pl-4" style="border-color: {{ $course->color ?? '#0f766e' }}">
+            <p class="text-sm text-slate-500">{{ $course->name }}</p>
+            <h1 class="mt-1 text-2xl font-medium text-slate-900">{{ $topic->title }}</h1>
+            <p class="mt-1 text-xs text-slate-500">Bobot {{ $topic->difficulty_weight }}/5 · Penguasaan {{ $topic->mastery_level }}/5</p>
         </div>
 
-        <!-- Phase Progress Bar -->
-        <div class="mt-4 flex gap-1">
-            <div class="h-1.5 rounded-full flex-1 transition-all duration-500"
-                :class="phase === 'pomodoro' || phase === 'recall' || phase === 'feynman' || phase === 'done' ? 'bg-primary-500' : 'bg-slate-200'"></div>
-            <div class="h-1.5 rounded-full flex-1 transition-all duration-500"
-                :class="phase === 'recall' || phase === 'feynman' || phase === 'done' ? 'bg-primary-500' : 'bg-slate-200'"></div>
-            <div class="h-1.5 rounded-full flex-1 transition-all duration-500"
-                :class="phase === 'feynman' || phase === 'done' ? 'bg-primary-500' : 'bg-slate-200'"></div>
-        </div>
-    </div>
+        <ol class="mt-6 grid grid-cols-3 gap-2" aria-label="Tahap sesi">
+            @foreach($steps as $n => [$key, $label, $bar, $ink])
+                <li :aria-current="phase === '{{ $key }}' ? 'step' : null">
+                    <div class="h-1.5 rounded-full transition-colors duration-300" :class="reached({{ $n }}) ? '{{ $bar }}' : 'bg-slate-200'"></div>
+                    <p class="mt-2 text-xs" :class="phase === '{{ $key }}' ? 'font-medium {{ $ink }}' : 'text-slate-500'">
+                        <span class="font-mono">{{ $n + 1 }}</span> {{ $label }}
+                    </p>
+                </li>
+            @endforeach
+        </ol>
+    </section>
 
-    <!-- AI Summary Card (selalu visible) -->
     @if($aiSummary)
-    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200" x-show="phase !== 'done'">
-        <div class="text-xs font-bold text-slate-700 flex items-center gap-1.5 mb-2">
-            <span>📖</span> Rangkuman Materi:
-        </div>
-        <p class="text-sm text-slate-600 leading-relaxed">{{ $aiSummary }}</p>
-    </div>
+        <section class="rounded-2xl bg-slate-100/70 p-5 sm:p-6" x-show="phase !== 'done'" aria-label="Rangkuman materi">
+            <p class="text-xs text-slate-500">Rangkuman dari Gemini</p>
+            <p class="mt-1 text-sm leading-relaxed text-slate-700">{{ $aiSummary }}</p>
+        </section>
     @endif
 
-    <!-- ===== PHASE 1: POMODORO TIMER ===== -->
-    <div x-show="phase === 'pomodoro'" x-transition class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm text-center">
-        <h2 class="text-lg font-bold text-slate-900 mb-2">🍅 Pomodoro — Waktu Fokus Belajar</h2>
-        <p class="text-xs text-slate-500 mb-6">Pelajari materi modul Anda dengan fokus penuh. Timer bisa dipercepat untuk demo.</p>
+    <!-- Tahap 1: Pomodoro -->
+    <section x-show="phase === 'pomodoro'" x-transition.opacity class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 text-center" aria-labelledby="pomodoro-title">
+        <h2 id="pomodoro-title" class="text-base font-medium text-slate-900">Fokus pada materinya</h2>
+        <p class="mt-1 text-sm text-slate-600">Baca modul tanpa gangguan sampai timer habis</p>
 
-        <!-- Timer Display -->
-        <div class="text-6xl font-extrabold text-slate-900 font-mono tracking-wider mb-6">
-            <span x-text="timerDisplay"></span>
+        <p class="mt-8 font-mono text-6xl sm:text-7xl font-normal tabular-nums text-slate-900" x-text="timerDisplay" aria-live="off"></p>
+        <div class="mx-auto mt-6 h-1 max-w-xs overflow-hidden rounded-full bg-slate-200" aria-hidden="true">
+            <div class="h-1 origin-left rounded-full bg-rose-500 transition-transform duration-1000 ease-linear" :style="`transform: scaleX(${elapsedRatio})`"></div>
         </div>
 
-        <!-- Timer Controls -->
-        <div class="flex items-center justify-center gap-3 mb-6">
-            <button @click="toggleTimer()" class="px-6 py-2.5 rounded-xl font-semibold text-sm transition shadow-sm"
-                :class="timerRunning ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'bg-primary-600 hover:bg-primary-700 text-white'">
-                <span x-text="timerRunning ? '⏸ Jeda' : '▶ Mulai'"></span>
+        <div class="mt-8 flex items-center justify-center gap-3">
+            <button type="button" @click="toggleTimer()"
+                class="h-11 min-w-28 rounded-full bg-primary-600 px-6 text-sm font-medium text-white hover:bg-primary-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                x-text="timerRunning ? 'Jeda' : (startTime ? 'Lanjutkan' : 'Mulai')"></button>
+            <button type="button" @click="resetTimer()"
+                class="h-11 rounded-full border border-slate-200 bg-white px-5 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
+                Ulang
             </button>
-            <button @click="resetTimer()" class="px-4 py-2.5 rounded-xl font-semibold text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
-                🔄 Reset
-            </button>
         </div>
 
-        <!-- Quick Durations -->
-        <div class="flex items-center justify-center gap-2 mb-6">
-            <span class="text-xs text-slate-500">Atur durasi:</span>
-            <button @click="setTimer(50)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-primary-300 transition" :class="totalMinutes === 50 ? 'bg-primary-50 text-primary-700 border-primary-300' : ''">50 menit</button>
-            <button @click="setTimer(25)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-primary-300 transition" :class="totalMinutes === 25 ? 'bg-primary-50 text-primary-700 border-primary-300' : ''">25 menit</button>
-            <button @click="setTimer(5)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-primary-300 transition" :class="totalMinutes === 5 ? 'bg-primary-50 text-primary-700 border-primary-300' : ''">5 menit (demo)</button>
-            <button @click="setTimer(1)" class="text-xs px-3 py-1 rounded-lg border border-slate-200 hover:border-primary-300 transition" :class="totalMinutes === 1 ? 'bg-primary-50 text-primary-700 border-primary-300' : ''">1 menit (test)</button>
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-2" role="group" aria-label="Durasi">
+            @foreach($durations as $min)
+                <button type="button" @click="setTimer({{ $min }})" :aria-pressed="totalMinutes === {{ $min }}"
+                    class="rounded-full border px-3 py-1 text-xs tabular-nums transition-colors"
+                    :class="totalMinutes === {{ $min }} ? 'border-primary-600 bg-primary-50 text-primary-700' : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900'">
+                    {{ $min }} menit
+                </button>
+            @endforeach
         </div>
 
-        <!-- Skip to next phase (for demo) -->
-        <button @click="skipPomodoro()" class="text-xs text-slate-400 hover:text-primary-600 underline transition">
-            Lewati ke Active Recall →
+        <button type="button" @click="skipPomodoro()" class="mt-6 text-xs text-slate-500 underline-offset-4 hover:text-slate-900 hover:underline transition-colors">
+            Lewati ke Active Recall
         </button>
-    </div>
+    </section>
 
-    <!-- ===== PHASE 2: ACTIVE RECALL ===== -->
-    <div x-show="phase === 'recall'" x-transition class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-            <h2 class="text-lg font-bold text-slate-900">🧠 Active Recall — Uji Pemahaman</h2>
+    <!-- Tahap 2: Active Recall -->
+    <section x-show="phase === 'recall'" x-transition.opacity class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8" aria-labelledby="recall-title">
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+            <div>
+                <h2 id="recall-title" class="text-base font-medium text-slate-900">Pilih satu pertanyaan</h2>
+                <p class="mt-1 text-sm text-slate-600">Jawab tanpa melihat modul. Setelah ini kamu menjelaskannya dengan bahasamu sendiri</p>
+            </div>
             <button type="button" @click="refreshQuestions()" :disabled="isRefreshing"
-                class="text-xs font-semibold px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-primary-300 bg-slate-50 hover:bg-primary-50 text-slate-700 hover:text-primary-700 disabled:opacity-50 transition self-start sm:self-auto">
-                <span x-show="!isRefreshing">🔄 Buat Soal Baru</span>
-                <span x-show="isRefreshing">⏳ Membuat soal...</span>
-            </button>
+                class="self-start shrink-0 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-900 hover:bg-slate-100 disabled:opacity-50 transition-colors"
+                x-text="isRefreshing ? 'Membuat soal…' : 'Soal lain'"></button>
         </div>
-        <p class="text-xs text-slate-500 mb-6">Pilih satu pertanyaan konseptual, lalu Anda akan menjelaskan jawabannya dengan bahasa sendiri (Teknik Feynman).</p>
 
-        <div class="space-y-3">
+        <div class="mt-6 space-y-3">
             <template x-for="(question, qi) in questions" :key="qi">
-                <button type="button" @click="selectQuestion(question)"
-                    class="w-full text-left p-4 rounded-xl border-2 transition text-sm"
-                    :class="selectedQuestion === question ? 'border-primary-500 bg-primary-50 text-primary-900' : 'border-slate-200 hover:border-primary-300 bg-white text-slate-700'">
-                    <span class="font-bold text-primary-600 mr-2" x-text="'Q' + (qi + 1) + '.'"></span>
+                <button type="button" @click="selectQuestion(question)" :aria-pressed="selectedQuestion === question"
+                    class="flex w-full gap-3 rounded-xl border p-4 text-left text-sm transition-colors"
+                    :class="selectedQuestion === question ? 'border-violet-600 bg-violet-50 text-slate-900' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'">
+                    <span class="font-mono text-slate-500" x-text="qi + 1"></span>
                     <span x-text="question"></span>
                 </button>
             </template>
         </div>
 
-        <div class="mt-6 text-center">
+        <div class="mt-6 flex justify-end">
             <button type="button" @click="goToFeynman()" :disabled="!selectedQuestion"
-                class="px-8 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-sm transition text-sm">
-                Lanjut ke Penjelasan Feynman →
+                class="h-11 rounded-full bg-primary-600 px-6 text-sm font-medium text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 transition-colors">
+                Lanjut ke Feynman
             </button>
         </div>
-    </div>
+    </section>
 
-    <!-- ===== PHASE 3: FEYNMAN TECHNIQUE ===== -->
-    <div x-show="phase === 'feynman'" x-transition class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
-        <h2 class="text-lg font-bold text-slate-900 mb-2 text-center">✍️ Teknik Feynman — Jelaskan dengan Bahasa Sendiri</h2>
-        <p class="text-xs text-slate-500 mb-4 text-center">Bayangkan Anda menjelaskan konsep ini ke teman yang belum pernah belajar topik ini.</p>
+    <!-- Tahap 3: Feynman -->
+    <section x-show="phase === 'feynman'" x-transition.opacity class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8" aria-labelledby="feynman-title">
+        <h2 id="feynman-title" class="text-base font-medium text-slate-900">Jelaskan dengan bahasamu sendiri</h2>
+        <p class="mt-1 text-sm text-slate-600">Bayangkan kamu menjelaskannya ke teman yang belum pernah belajar topik ini</p>
 
-        <!-- Selected Question -->
-        <div class="bg-primary-50 rounded-xl p-4 border border-primary-200 mb-5">
-            <div class="text-xs font-bold text-primary-700 mb-1">Pertanyaan yang dipilih:</div>
-            <p class="text-sm text-primary-900 font-medium" x-text="selectedQuestion"></p>
+        <div class="mt-5 rounded-xl bg-slate-50 p-4">
+            <p class="text-xs text-slate-500">Pertanyaan</p>
+            <p class="mt-1 text-sm font-medium text-slate-900" x-text="selectedQuestion"></p>
         </div>
 
-        <!-- Feynman Form -->
-        <form method="POST" action="{{ route('session.submit', $session->id) }}" id="feynmanForm" @submit="isSubmitting = true">
+        <form method="POST" action="{{ route('session.submit', $session->id) }}" id="feynmanForm" @submit="isSubmitting = true" class="mt-5">
             @csrf
             <input type="hidden" name="question" :value="selectedQuestion">
             <input type="hidden" name="pomodoro_completed" :value="pomodoroCompleted ? 1 : 0">
             <input type="hidden" name="time_spent_minutes" :value="elapsedMinutes">
 
-            <div class="mb-4">
-                <label for="explanation" class="block text-xs font-bold text-slate-700 mb-2">
-                    Penjelasan Anda (minimal 20 karakter):
-                </label>
-                <textarea id="explanation" name="explanation" rows="8"
-                    class="w-full rounded-xl border border-slate-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 p-4 text-sm text-slate-800 placeholder-slate-400 resize-none transition"
-                    placeholder="Jadi konsep ini intinya adalah... Cara kerjanya seperti... Contohnya dalam kehidupan nyata..."
-                    x-model="explanation"
-                    required minlength="20" maxlength="5000"></textarea>
-                <div class="flex justify-between mt-1">
-                    <span class="text-[11px] text-slate-400" x-text="explanation.length + '/5000 karakter'"></span>
-                    <span class="text-[11px]" :class="explanation.length >= 20 ? 'text-emerald-600' : 'text-rose-500'"
-                        x-text="explanation.length >= 20 ? '✓ Cukup panjang' : 'Minimal 20 karakter lagi'"></span>
-                </div>
-            </div>
+            <label for="explanation" class="mb-2 block text-sm text-slate-700">Penjelasanmu</label>
+            <textarea id="explanation" name="explanation" rows="8"
+                class="w-full resize-none rounded-xl border border-slate-300 p-4 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
+                placeholder="Intinya… Cara kerjanya seperti… Contohnya…"
+                x-model="explanation" required minlength="20" maxlength="5000"></textarea>
+            <p class="mt-1 text-right font-mono text-xs tabular-nums text-slate-500"
+               x-text="explanation.length < 20 ? `${20 - explanation.length} karakter lagi` : `${explanation.length}/5000`"></p>
 
-            <div class="text-center">
+            <div class="mt-4 flex justify-end">
                 <button type="submit" :disabled="explanation.length < 20 || isSubmitting"
-                    class="px-10 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-sm transition text-sm">
-                    <span x-show="!isSubmitting">🚀 Kirim & Dapatkan Feedback AI</span>
-                    <span x-show="isSubmitting">⏳ Memproses evaluasi...</span>
-                </button>
+                    class="h-11 rounded-full bg-primary-600 px-6 text-sm font-medium text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 transition-colors"
+                    x-text="isSubmitting ? 'Gemini sedang menilai…' : 'Kirim penjelasan'"></button>
             </div>
         </form>
-    </div>
+    </section>
 
 </div>
 
@@ -180,14 +158,13 @@ function studyRoom() {
         isSubmitting: false,
         startTime: null,
 
-        get phaseLabel() {
-            const labels = {
-                pomodoro: '🍅 Fase 1: Pomodoro',
-                recall: '🧠 Fase 2: Active Recall',
-                feynman: '✍️ Fase 3: Feynman',
-                done: '✅ Selesai'
-            };
-            return labels[this.phase] || '';
+        // Tahap ke-n (0-based) sudah dicapai atau sedang berjalan
+        reached(n) {
+            return ['pomodoro', 'recall', 'feynman', 'done'].indexOf(this.phase) >= n;
+        },
+
+        get elapsedRatio() {
+            return 1 - this.secondsLeft / (this.totalMinutes * 60);
         },
 
         get timerDisplay() {

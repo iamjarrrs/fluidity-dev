@@ -165,7 +165,7 @@ class StudySessionController extends Controller
     /**
      * Halaman hasil sesi belajar — feedback AI & skor
      */
-    public function result(StudySession $session): View
+    public function result(StudySession $session): View|RedirectResponse
     {
         if ($session->user_id !== Auth::id()) {
             abort(403);

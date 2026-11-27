@@ -31,7 +31,7 @@
                 @endif
             </p>
         </div>
-        <a href="{{ route('courses.create') }}" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
+        <a href="{{ route('courses.create') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
             <svg class="size-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
             Tambah mata kuliah
         </a>
@@ -83,8 +83,8 @@
                         <div class="mt-1.5 h-2 rounded-full bg-slate-200"><div class="h-2 rounded-full {{ $bar }}" style="width: {{ $pct }}%"></div></div>
                     </div>
                     <div class="mt-6 flex flex-wrap gap-3">
-                        <a href="{{ route('session.room', $nextSession->id) }}" class="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 transition-colors">Mulai sesi</a>
-                        <a href="{{ route('schedule.preview') }}" class="rounded-lg border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors">Atur ulang jadwal</a>
+                        <a href="{{ route('session.room', $nextSession->id) }}" class="rounded-full bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 transition-colors">Mulai sesi</a>
+                        <a href="{{ route('schedule.preview') }}" class="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors">Atur ulang jadwal</a>
                     </div>
                 @else
                     <p class="text-sm text-slate-500">Sesi berikutnya</p>
@@ -98,9 +98,9 @@
                     </p>
                     <div class="mt-5">
                         @if($courses->isNotEmpty())
-                            <a href="{{ route('schedule.preview') }}" class="inline-block rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 transition-colors">Buat jadwal belajar</a>
+                            <a href="{{ route('schedule.preview') }}" class="inline-block rounded-full bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 transition-colors">Buat jadwal belajar</a>
                         @else
-                            <a href="{{ route('courses.create') }}" class="inline-block rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 transition-colors">Tambah mata kuliah</a>
+                            <a href="{{ route('courses.create') }}" class="inline-block rounded-full bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 transition-colors">Tambah mata kuliah</a>
                         @endif
                     </div>
                 @endif
@@ -151,86 +151,6 @@
                         @endforeach
                     </ol>
                 @endif
-            </section>
-
-            <!-- Preferensi jam luang -->
-            <section x-data="{ editingPref: false }" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 text-xs text-slate-600 space-y-4" aria-label="Jam luang belajar">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div>
-                        <p class="text-sm">
-                            <span class="font-medium text-slate-800">Jam luang belajar:</span>
-                            <span class="font-medium text-slate-900 tabular-nums">{{ substr($user->study_window_start ?? '08:00', 0, 5) }} – {{ substr($user->study_window_end ?? '22:00', 0, 5) }} WIB</span>
-                        </p>
-                        <p class="text-xs text-slate-500 mt-0.5">Maksimal {{ $user->max_daily_sessions ?? 2 }} sesi per hari supaya tidak burnout</p>
-                    </div>
-                    <button type="button" @click="editingPref = !editingPref"
-                        class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-800 font-medium transition-colors self-start sm:self-auto">
-                        <span x-text="editingPref ? 'Tutup' : 'Atur jam luang'"></span>
-                    </button>
-                </div>
-
-                @php
-                    $currentStart = substr($user->study_window_start ?? '08:00', 0, 5);
-                    $currentEnd = substr($user->study_window_end ?? '22:00', 0, 5);
-                    [$startH, $startM] = explode(':', $currentStart);
-                    [$endH, $endM] = explode(':', $currentEnd);
-                @endphp
-                <form x-show="editingPref" x-transition method="POST" action="{{ route('preferences.update') }}"
-                    x-data="{ startH: '{{ $startH }}', startM: '{{ $startM }}', endH: '{{ $endH }}', endM: '{{ $endM }}' }"
-                    class="pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
-                    @csrf
-                    <input type="hidden" name="study_window_start" :value="startH + ':' + startM">
-                    <input type="hidden" name="study_window_end" :value="endH + ':' + endM">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-600 mb-1">Mulai (24 jam)</label>
-                        <div class="flex items-center gap-1">
-                            <select x-model="startH" aria-label="Jam mulai" class="w-full rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
-                                @for($h = 0; $h < 24; $h++)
-                                    @php $hh = sprintf('%02d', $h); @endphp
-                                    <option value="{{ $hh }}">{{ $hh }}</option>
-                                @endfor
-                            </select>
-                            <span class="font-medium text-slate-500">:</span>
-                            <select x-model="startM" aria-label="Menit mulai" class="w-full rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
-                                @for($m = 0; $m < 60; $m++)
-                                    @php $mm = sprintf('%02d', $m); @endphp
-                                    <option value="{{ $mm }}">{{ $mm }}</option>
-                                @endfor
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-600 mb-1">Selesai (24 jam)</label>
-                        <div class="flex items-center gap-1">
-                            <select x-model="endH" aria-label="Jam selesai" class="w-full rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
-                                @for($h = 0; $h < 24; $h++)
-                                    @php $hh = sprintf('%02d', $h); @endphp
-                                    <option value="{{ $hh }}">{{ $hh }}</option>
-                                @endfor
-                            </select>
-                            <span class="font-medium text-slate-500">:</span>
-                            <select x-model="endM" aria-label="Menit selesai" class="w-full rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
-                                @for($m = 0; $m < 60; $m++)
-                                    @php $mm = sprintf('%02d', $m); @endphp
-                                    <option value="{{ $mm }}">{{ $mm }}</option>
-                                @endfor
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="max_daily_sessions" class="block text-xs font-medium text-slate-600 mb-1">Maks. sesi per hari</label>
-                        <select id="max_daily_sessions" name="max_daily_sessions" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
-                            @for($s = 1; $s <= 4; $s++)
-                                <option value="{{ $s }}" {{ ($user->max_daily_sessions ?? 2) == $s ? 'selected' : '' }}>{{ $s }} sesi / hari</option>
-                            @endfor
-                        </select>
-                    </div>
-                    <div>
-                        <button type="submit" class="w-full px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors">
-                            Simpan jam luang
-                        </button>
-                    </div>
-                </form>
             </section>
         </div>
 
@@ -318,20 +238,99 @@
                             </li>
                         @endforeach
                     </ul>
-                    @if($nextReview)
-                        <p class="mt-4 border-t border-slate-200 pt-4 text-xs text-slate-500">
-                            Review berikutnya untuk {{ $nextReview->title }} dijadwalkan {{ $nextReview->next_review_due->locale('id')->isoFormat('dddd, D MMMM') }}
-                        </p>
-                    @endif
+                    <div class="mt-4 space-y-3 border-t border-slate-200 pt-4 text-xs text-slate-500">
+                        @if($nextReview)
+                            <p>Review berikutnya untuk {{ $nextReview->title }} dijadwalkan {{ $nextReview->next_review_due->locale('id')->isoFormat('dddd, D MMMM') }}</p>
+                        @endif
+                        {{-- Arti warna mode sesi yang dipakai di kartu sesi dan jadwal --}}
+                        <ul class="flex flex-wrap gap-x-4 gap-y-2" aria-label="Arti warna mode sesi">
+                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-rose-500" aria-hidden="true"></span>Pomodoro</li>
+                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-violet-600" aria-hidden="true"></span>Active Recall</li>
+                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-amber-500" aria-hidden="true"></span>Feynman</li>
+                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-sky-600" aria-hidden="true"></span>Review</li>
+                        </ul>
+                    </div>
                 </section>
             @endif
 
-            <!-- Arti warna -->
-            <section aria-label="Arti warna" class="flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-500">
-                <span class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-rose-500" aria-hidden="true"></span>Pomodoro</span>
-                <span class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-violet-600" aria-hidden="true"></span>Active Recall</span>
-                <span class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-amber-500" aria-hidden="true"></span>Feynman</span>
-                <span class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-sky-600" aria-hidden="true"></span>Review</span>
+            <!-- Preferensi jam luang -->
+            <section x-data="{ editingPref: false }" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 text-xs text-slate-600 space-y-4" aria-label="Jam luang belajar">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <p class="text-sm">
+                            <span class="font-medium text-slate-800">Jam luang belajar:</span>
+                            <span class="font-medium text-slate-900 tabular-nums">{{ substr($user->study_window_start ?? '08:00', 0, 5) }} – {{ substr($user->study_window_end ?? '22:00', 0, 5) }} WIB</span>
+                        </p>
+                        <p class="text-xs text-slate-500 mt-0.5">Maksimal {{ $user->max_daily_sessions ?? 2 }} sesi per hari supaya tidak burnout</p>
+                    </div>
+                    <button type="button" @click="editingPref = !editingPref"
+                        class="px-3 py-1.5 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-800 font-medium transition-colors">
+                        <span x-text="editingPref ? 'Tutup' : 'Atur jam luang'"></span>
+                    </button>
+                </div>
+
+                @php
+                    $currentStart = substr($user->study_window_start ?? '08:00', 0, 5);
+                    $currentEnd = substr($user->study_window_end ?? '22:00', 0, 5);
+                    [$startH, $startM] = explode(':', $currentStart);
+                    [$endH, $endM] = explode(':', $currentEnd);
+                @endphp
+                <form x-show="editingPref" x-transition method="POST" action="{{ route('preferences.update') }}"
+                    x-data="{ startH: '{{ $startH }}', startM: '{{ $startM }}', endH: '{{ $endH }}', endM: '{{ $endM }}' }"
+                    class="pt-4 border-t border-slate-100 grid grid-cols-2 gap-3 items-end">
+                    @csrf
+                    <input type="hidden" name="study_window_start" :value="startH + ':' + startM">
+                    <input type="hidden" name="study_window_end" :value="endH + ':' + endM">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Mulai (24 jam)</label>
+                        <div class="flex items-center gap-1">
+                            <select x-model="startH" aria-label="Jam mulai" class="w-full rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
+                                @for($h = 0; $h < 24; $h++)
+                                    @php $hh = sprintf('%02d', $h); @endphp
+                                    <option value="{{ $hh }}">{{ $hh }}</option>
+                                @endfor
+                            </select>
+                            <span class="font-medium text-slate-500">:</span>
+                            <select x-model="startM" aria-label="Menit mulai" class="w-full rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
+                                @for($m = 0; $m < 60; $m++)
+                                    @php $mm = sprintf('%02d', $m); @endphp
+                                    <option value="{{ $mm }}">{{ $mm }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Selesai (24 jam)</label>
+                        <div class="flex items-center gap-1">
+                            <select x-model="endH" aria-label="Jam selesai" class="w-full rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
+                                @for($h = 0; $h < 24; $h++)
+                                    @php $hh = sprintf('%02d', $h); @endphp
+                                    <option value="{{ $hh }}">{{ $hh }}</option>
+                                @endfor
+                            </select>
+                            <span class="font-medium text-slate-500">:</span>
+                            <select x-model="endM" aria-label="Menit selesai" class="w-full rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
+                                @for($m = 0; $m < 60; $m++)
+                                    @php $mm = sprintf('%02d', $m); @endphp
+                                    <option value="{{ $mm }}">{{ $mm }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="max_daily_sessions" class="block text-xs font-medium text-slate-600 mb-1">Maks. sesi per hari</label>
+                        <select id="max_daily_sessions" name="max_daily_sessions" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs text-slate-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-200">
+                            @for($s = 1; $s <= 4; $s++)
+                                <option value="{{ $s }}" {{ ($user->max_daily_sessions ?? 2) == $s ? 'selected' : '' }}>{{ $s }} sesi / hari</option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-full transition-colors">
+                            Simpan jam luang
+                        </button>
+                    </div>
+                </form>
             </section>
         </div>
     </div>
