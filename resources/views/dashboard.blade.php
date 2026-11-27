@@ -19,6 +19,9 @@
     <!-- Hari ini -->
     <div class="flex flex-wrap items-end justify-between gap-4">
         <div>
+            <p class="mt-2 text-slate-600">
+                Halo, {{ $user->name }}
+            </p>
             <h1 class="text-2xl sm:text-3xl font-medium text-slate-900">{{ now()->locale('id')->isoFormat('dddd, D MMMM') }}</h1>
             <p class="mt-2 text-slate-600">
                 @if($todayLeft > 0)
@@ -49,7 +52,7 @@
                         [$pct, $label, $bar, $ink] = $mastery($topic->mastery_level);
                     @endphp
                     <div class="flex flex-wrap items-center justify-between gap-3">
-                        <p class="text-sm text-slate-500">Sesi berikutnya</p>
+                        <p class="text-base font-medium text-slate-900">Sesi berikutnya</p>
                         <span class="text-sm text-slate-500 tabular-nums">
                             {{ $nextSession->scheduled_start->locale('id')->isoFormat('ddd, D MMM') }} ·
                             {{ $nextSession->scheduled_start->format('H.i') }} – {{ $nextSession->scheduled_end->format('H.i') }} · {{ $nextSession->duration_minutes }} menit
@@ -96,7 +99,7 @@
                         </ul>
                     </div>
                 @else
-                    <p class="text-sm text-slate-500">Sesi berikutnya</p>
+                    <p class="text-base font-medium text-slate-900">Sesi berikutnya</p>
                     <h2 id="next-title" class="mt-2 text-xl font-medium text-slate-900">Belum ada sesi yang dijadwalkan</h2>
                     <p class="mt-1 text-sm text-slate-600">
                         @if($courses->isNotEmpty())
@@ -168,20 +171,20 @@
 
             <!-- Ringkasan minggu ini -->
             <section aria-labelledby="week-title">
-                <h2 id="week-title" class="text-sm text-slate-500">Minggu ini</h2>
+                <h2 id="week-title" class="text-base font-medium text-slate-900">Minggu ini</h2>
                 <div class="mt-2 grid grid-cols-3 gap-3">
-                    <div class="rounded-xl border border-slate-200 bg-white p-4">
-                        <p class="text-xs text-slate-500">Perlu review</p>
-                        {{-- Aksen amber hanya kalau memang ada yang perlu di-review --}}
-                        <p class="mt-1 text-2xl font-medium tabular-nums {{ $reviewDue > 0 ? 'text-amber-700' : 'text-slate-900' }}">{{ $reviewDue }} <span class="text-sm font-normal text-slate-500">topik</span></p>
+                    {{-- Warna dari palet: sky = mode Review, teal = brand/progres, amber = aksen 10% --}}
+                    <div class="rounded-xl border border-sky-200 bg-sky-100 p-4">
+                        <p class="text-xs text-sky-800">Perlu review</p>
+                        <p class="mt-1 text-2xl font-medium tabular-nums text-sky-900">{{ $reviewDue }} <span class="text-sm font-normal text-sky-800">topik</span></p>
                     </div>
-                    <div class="rounded-xl border border-slate-200 bg-white p-4">
-                        <p class="text-xs text-slate-500">Sesi selesai</p>
-                        <p class="mt-1 text-2xl font-medium text-slate-900 tabular-nums">{{ $weekCompleted }}<span class="text-sm font-normal text-slate-500"> dari {{ $weekTotal }}</span></p>
+                    <div class="rounded-xl border border-primary-200 bg-primary-100 p-4">
+                        <p class="text-xs text-primary-700">Sesi selesai</p>
+                        <p class="mt-1 text-2xl font-medium text-primary-900 tabular-nums">{{ $weekCompleted }}<span class="text-sm font-normal text-primary-700"> dari {{ $weekTotal }}</span></p>
                     </div>
-                    <div class="rounded-xl border border-slate-200 bg-white p-4">
-                        <p class="text-xs text-slate-500">Waktu belajar</p>
-                        <p class="mt-1 text-2xl font-medium text-slate-900 tabular-nums">{{ str_replace('.', ',', $weekHours) }} <span class="text-sm font-normal text-slate-500">jam</span></p>
+                    <div class="rounded-xl border border-amber-200 bg-amber-100 p-4">
+                        <p class="text-xs text-amber-800">Waktu belajar</p>
+                        <p class="mt-1 text-2xl font-medium text-amber-900 tabular-nums">{{ str_replace('.', ',', $weekHours) }} <span class="text-sm font-normal text-amber-800">jam</span></p>
                     </div>
                 </div>
             </section>
@@ -257,16 +260,16 @@
 
             <!-- Preferensi jam luang -->
             <section x-data="{ editingPref: false }" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 text-xs text-slate-600 space-y-4" aria-label="Jam luang belajar">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                        <p class="text-sm">
-                            <span class="font-medium text-slate-800">Jam luang belajar:</span>
-                            <span class="font-medium text-slate-900 tabular-nums">{{ substr($user->study_window_start ?? '08:00', 0, 5) }} – {{ substr($user->study_window_end ?? '22:00', 0, 5) }} WIB</span>
-                        </p>
-                        <p class="text-xs text-slate-500 mt-0.5">Maksimal {{ $user->max_daily_sessions ?? 2 }} sesi per hari supaya tidak burnout</p>
+                {{-- Tombol selalu di kanan; teks yang menyesuaikan lebar --}}
+                <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                        {{-- Sama dengan card jam luang di halaman Jadwal: label kecil, jam besar, keterangan sedang --}}
+                        <p class="text-xs font-medium text-slate-500">Jam luang belajar</p>
+                        <p class="mt-1 text-xl font-semibold text-slate-900 tabular-nums">{{ substr($user->study_window_start ?? '08:00', 0, 5) }} - {{ substr($user->study_window_end ?? '22:00', 0, 5) }} WIB</p>
+                        <p class="mt-1 text-sm text-slate-500">Maksimal {{ $user->max_daily_sessions ?? 2 }} sesi per hari supaya tidak burnout</p>
                     </div>
                     <button type="button" @click="editingPref = !editingPref"
-                        class="px-3 py-1.5 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-800 font-medium transition-colors">
+                        class="shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-800 font-medium transition-colors">
                         <span x-text="editingPref ? 'Tutup' : 'Atur jam luang'"></span>
                     </button>
                 </div>

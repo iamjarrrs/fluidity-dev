@@ -8,7 +8,7 @@
 @endphp
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div>
 
     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
         <svg class="size-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -25,8 +25,9 @@
         @csrf
         @method('PUT')
 
-        <!-- Mata kuliah -->
-        <section class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6" aria-labelledby="course-title">
+        <!-- Satu card: data mata kuliah di atas, bab dan modul di bawah (sama dengan halaman tambah) -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+        <section aria-labelledby="course-title">
             <h2 id="course-title" class="text-base font-medium text-slate-900">Mata kuliah</h2>
 
             <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -55,7 +56,7 @@
         </section>
 
         <!-- Bab & modul -->
-        <section class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6" aria-labelledby="topics-title">
+        <section class="mt-8 border-t border-slate-200 pt-8" aria-labelledby="topics-title">
             <div class="flex flex-wrap items-start justify-between gap-3">
                 <div>
                     <h2 id="topics-title" class="text-base font-medium text-slate-900">Bab dan modul materi</h2>
@@ -74,6 +75,7 @@
             </div>
             <template id="topic-template">@include('courses.topic-row', ['i' => '__I__', 'topic' => null])</template>
         </section>
+        </div>
 
         <div class="flex items-center justify-end gap-3">
             <a href="{{ route('courses.show', $course->id) }}" class="inline-flex h-11 items-center rounded-full border border-slate-200 bg-white px-5 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">Batal</a>

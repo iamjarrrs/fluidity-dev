@@ -12,7 +12,7 @@
 @endphp
 
 @section('content')
-<div class="max-w-5xl mx-auto">
+<div>
 
     <!-- Header -->
     <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors">
@@ -118,15 +118,21 @@
     @else
         <!-- Ringkasan -->
         <section class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3" aria-label="Ringkasan rencana">
+            {{-- Warna mengikuti arti, sama dengan dashboard: teal = sesi, amber = waktu/hari, sky = topik yang di-review --}}
+            @php
+                $teal = ['border-primary-200 bg-primary-100', 'text-primary-700', 'text-primary-900'];
+                $amber = ['border-amber-200 bg-amber-100', 'text-amber-800', 'text-amber-900'];
+                $sky = ['border-sky-200 bg-sky-100', 'text-sky-800', 'text-sky-900'];
+            @endphp
             @foreach([
-                ['Total sesi', $plan->count()],
-                ['Hari belajar', $days->count()],
-                ['Topik tercakup', $topics->count()],
-                ['Maks. sesi per hari', $maxDaily],
-            ] as [$label, $value])
-                <div class="rounded-xl border border-slate-200 bg-white p-4">
-                    <p class="text-xs text-slate-500">{{ $label }}</p>
-                    <p class="mt-1 text-2xl font-medium text-slate-900 tabular-nums">{{ $value }}</p>
+                ['Total sesi', $plan->count(), $teal],
+                ['Hari belajar', $days->count(), $amber],
+                ['Topik tercakup', $topics->count(), $sky],
+                ['Maks. sesi per hari', $maxDaily, $teal],
+            ] as [$label, $value, [$box, $ink, $num]])
+                <div class="rounded-xl border p-4 {{ $box }}">
+                    <p class="text-xs {{ $ink }}">{{ $label }}</p>
+                    <p class="mt-1 text-2xl font-medium tabular-nums {{ $num }}">{{ $value }}</p>
                 </div>
             @endforeach
         </section>
