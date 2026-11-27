@@ -86,6 +86,15 @@
                         <a href="{{ route('session.room', $nextSession->id) }}" class="rounded-full bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 transition-colors">Mulai sesi</a>
                         <a href="{{ route('schedule.preview') }}" class="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors">Atur ulang jadwal</a>
                     </div>
+                    {{-- Arti warna mode sesi: dipakai di alur sesi di atas dan label Review di jadwal --}}
+                    <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-slate-200 pt-4 text-xs text-slate-500">
+                        <ul class="flex flex-wrap gap-x-4 gap-y-2" aria-label="Arti warna mode sesi">
+                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-rose-500" aria-hidden="true"></span>Pomodoro</li>
+                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-violet-600" aria-hidden="true"></span>Active Recall</li>
+                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-amber-500" aria-hidden="true"></span>Feynman</li>
+                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-sky-600" aria-hidden="true"></span>Review</li>
+                        </ul>
+                    </div>
                 @else
                     <p class="text-sm text-slate-500">Sesi berikutnya</p>
                     <h2 id="next-title" class="mt-2 text-xl font-medium text-slate-900">Belum ada sesi yang dijadwalkan</h2>
@@ -238,18 +247,11 @@
                             </li>
                         @endforeach
                     </ul>
-                    <div class="mt-4 space-y-3 border-t border-slate-200 pt-4 text-xs text-slate-500">
-                        @if($nextReview)
-                            <p>Review berikutnya untuk {{ $nextReview->title }} dijadwalkan {{ $nextReview->next_review_due->locale('id')->isoFormat('dddd, D MMMM') }}</p>
-                        @endif
-                        {{-- Arti warna mode sesi yang dipakai di kartu sesi dan jadwal --}}
-                        <ul class="flex flex-wrap gap-x-4 gap-y-2" aria-label="Arti warna mode sesi">
-                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-rose-500" aria-hidden="true"></span>Pomodoro</li>
-                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-violet-600" aria-hidden="true"></span>Active Recall</li>
-                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-amber-500" aria-hidden="true"></span>Feynman</li>
-                            <li class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-sky-600" aria-hidden="true"></span>Review</li>
-                        </ul>
-                    </div>
+                    @if($nextReview)
+                        <p class="mt-4 border-t border-slate-200 pt-4 text-xs text-slate-500">
+                            Review berikutnya untuk {{ $nextReview->title }} dijadwalkan {{ $nextReview->next_review_due->locale('id')->isoFormat('dddd, D MMMM') }}
+                        </p>
+                    @endif
                 </section>
             @endif
 

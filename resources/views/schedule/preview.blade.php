@@ -41,11 +41,10 @@
     <section x-data="{ openPref: false }" class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 text-xs text-slate-600 space-y-4" aria-label="Jam luang belajar">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-                <p class="text-sm">
-                    <span class="font-medium text-slate-800">Jam luang belajar:</span>
-                    <span class="font-medium text-slate-900 tabular-nums">{{ $currentStart }} – {{ $currentEnd }} WIB</span>
-                </p>
-                <p class="mt-0.5 text-xs text-slate-500">Maksimal {{ $maxDaily }} sesi per hari</p>
+                {{-- Label kecil, nilai besar, keterangan sedang: jam luang adalah info utama card ini --}}
+                <p class="text-xs font-medium text-slate-500">Jam luang belajar</p>
+                <p class="mt-1 text-xl font-semibold text-slate-900 tabular-nums">{{ $currentStart }} - {{ $currentEnd }} WIB</p>
+                <p class="mt-1 text-sm text-slate-500">Maksimal {{ $maxDaily }} sesi per hari</p>
             </div>
             <button type="button" @click="openPref = !openPref"
                 class="self-start sm:self-auto rounded-full border border-slate-200 px-3 py-1.5 font-medium text-slate-800 hover:bg-slate-100 transition-colors">
