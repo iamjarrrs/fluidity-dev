@@ -1,5 +1,7 @@
 # Fluidity — Adaptive Study Guidance Web App
 
+**Bahasa Indonesia** | [English](README.en.md)
+
 **Fluidity** adalah aplikasi web pendamping belajar adaptif berbasis AI dan *Spaced Repetition* yang dirancang untuk membantu mahasiswa mempersiapkan ujian secara terstruktur tanpa *burnout*.
 
 Dikembangkan oleh **Tim WADW** untuk kompetisi **GDGoC ITB STACK 2026**.
