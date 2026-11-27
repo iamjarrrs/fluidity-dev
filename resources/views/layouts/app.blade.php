@@ -36,20 +36,23 @@
             <nav class="order-3 w-full sm:order-none sm:w-auto overflow-x-auto text-sm font-medium" aria-label="Navigasi utama"
                 x-data="{
                     pos: { left: 0, width: 0, opacity: 0 },
+                    on: null,
                     ready: false,
-                    move(el) { const li = el?.closest('li'); this.pos = li ? { left: li.offsetLeft, width: li.offsetWidth, opacity: 1 } : { ...this.pos, opacity: 0 } },
+                    move(el) { const li = el?.closest('li'); this.on = li; this.pos = li ? { left: li.offsetLeft, width: li.offsetWidth, opacity: 1 } : { ...this.pos, opacity: 0 } },
                     active() { return this.$refs.list.querySelector('[aria-current=page]') },
                 }"
                 x-init="move(active()); $nextTick(() => ready = true)">
                 <ul x-ref="list" class="relative flex w-fit rounded-full border border-slate-200 bg-white p-1" @mouseleave="move(active())" @focusout="move(active())">
-                    <li aria-hidden="true" class="absolute inset-y-1 left-0 rounded-full bg-primary-50"
+                    <li aria-hidden="true" class="absolute inset-y-1 left-0 rounded-full bg-primary-600"
                         :class="ready && 'transition-[transform,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'"
                         :style="`transform: translateX(${pos.left}px); width: ${pos.width}px; opacity: ${pos.opacity}`"></li>
                     @foreach($navLinks as $link)
                         @php $isActive = request()->routeIs($link['route']); @endphp
                         <li class="relative z-10">
                             <a href="{{ route($link['route']) }}" @mouseenter="move($el)" @focus="move($el)"
-                               class="block whitespace-nowrap rounded-full px-4 py-1.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 {{ $isActive ? 'text-primary-700' : 'text-slate-600 hover:text-slate-900' }}"
+                               {{-- Teks putih mengikuti posisi penanda teal (kontras 5,5:1), bukan status aktif --}}
+                               :class="on === $el.parentElement ? 'text-white' : 'text-slate-600 hover:text-slate-900'"
+                               class="block whitespace-nowrap rounded-full px-4 py-1.5 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
                                @if($isActive) aria-current="page" @endif>{{ $link['label'] }}</a>
                         </li>
                     @endforeach
